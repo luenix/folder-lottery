@@ -1,0 +1,48 @@
+# Primary source: https://rosettacode.org/wiki/Category:PowerShell
+
+$lottery = [PSCustomObject]@{
+    tier_1 = [PSCustomObject]@{Expected=0.4000; Name="☆"}
+    tier_2 = [PSCustomObject]@{Expected=0.2500; Name=("☆" * 2)}
+    tier_3 = [PSCustomObject]@{Expected=0.2000; Name=("☆" * 3)}
+    tier_4 = [PSCustomObject]@{Expected=0.1000; Name=("☆" * 4)}
+    tier_5 = [PSCustomObject]@{Expected=0.0480; Name=("☆" * 5)}
+    tier_6 = [PSCustomObject]@{Expected=0.0020; Name=("☆" * 6)}
+}
+
+Write-Output $lottery.tier
+
+$sum        = 0
+$iterations = 1000
+$cumulative = [ordered]@{}
+$randomly   = [ordered]@{}
+
+foreach ($name in $lottery.PSObject.Properties.Name)
+{
+    $sum += $lottery.$name.Expected
+    $cumulative.$name = $sum
+    $randomly.$name = 0
+}
+
+for ($i = 0; $i -lt $iterations; $i++)
+{
+    $random = Get-Random -Minimum 0.0 -Maximum 1.0
+
+    foreach ($name in $cumulative.Keys)
+    {
+        if ($random -le $cumulative.$name)
+        {
+            $randomly.$name++
+            break
+        }
+    }
+}
+
+foreach ($name in $lottery.PSObject.Properties.Name)
+{
+    [PSCustomObject]@{
+        Name      = $name
+        Expected  = $lottery.$name.Expected
+        Actual    = $randomly.$name / $iterations
+        Character = $lottery.$name.Name
+    }
+}

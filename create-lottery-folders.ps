@@ -1,0 +1,20 @@
+# This would prompt the user
+# $number_of_lottery_folders = Read-Host -Prompt "Enter the number of lottery folders to be created"
+
+# This instead hard-codes 6 for ease of use
+$number_of_lottery_folders = 6
+
+New-Item -Type Directory -Path "☆_root"
+
+for($i=1; $i -le $number_of_lottery_folders; $i++)
+{
+    New-Item -Type Directory -Path ("☆_root/" + "☆" * $i)
+}
+
+# ☆_root/
+# ☆_root/☆
+# ☆_root/☆☆
+# ☆_root/☆☆☆
+# ☆_root/☆☆☆☆
+# ☆_root/☆☆☆☆☆
+# ☆_root/☆☆☆☆☆☆
