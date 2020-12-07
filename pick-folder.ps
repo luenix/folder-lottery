@@ -9,10 +9,8 @@ $lottery = [PSCustomObject]@{
     tier_6 = [PSCustomObject]@{Expected=0.0020; Name=("☆" * 6)}
 }
 
-Write-Output $lottery.tier
-
 $sum        = 0
-$iterations = 1000
+$iterations = 1
 $cumulative = [ordered]@{}
 $randomly   = [ordered]@{}
 
@@ -31,18 +29,19 @@ for ($i = 0; $i -lt $iterations; $i++)
     {
         if ($random -le $cumulative.$name)
         {
-            $randomly.$name++
+            # $randomly.$name++
+            ("Lottery Result!: {0} " -f (Get-ChildItem -Path (Join-Path ☆_root $lottery.$name.Name) -Recurse | Get-Random -Count 1).FullName)
             break
         }
     }
 }
 
-foreach ($name in $lottery.PSObject.Properties.Name)
-{
-    [PSCustomObject]@{
-        Name      = $name
-        Expected  = $lottery.$name.Expected
-        Actual    = $randomly.$name / $iterations
-        Character = $lottery.$name.Name
-    }
-}
+# foreach ($name in $lottery.PSObject.Properties.Name)
+# {
+#     [PSCustomObject]@{
+#         Name      = $name
+#         Expected  = $lottery.$name.Expected
+#         Actual    = $randomly.$name / $iterations
+#         Character = $lottery.$name.Name
+#     }
+# }
